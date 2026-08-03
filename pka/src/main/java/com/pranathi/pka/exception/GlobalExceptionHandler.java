@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.pranathi.pka.service.NoteService.NoteNotFoundException;
-import com.pranathi.pka.service.UserService.EmailAlreadyExistsException;
+import com.pranathi.pka.exception.EmailAlreadyExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
