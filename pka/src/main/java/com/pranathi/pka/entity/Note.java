@@ -1,7 +1,9 @@
 package com.pranathi.pka.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
 @Entity
 @Table(name = "notes")
 public class Note {
@@ -9,12 +11,18 @@ public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-@NotBlank(message = "Title cannot be empty")
+
+    @NotBlank(message = "Title cannot be empty")
     private String title;
 
     @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Content cannot be empty")
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     public Note() {
     }
@@ -42,5 +50,12 @@ public class Note {
     public void setContent(String content) {
         this.content = content;
     }
-    
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

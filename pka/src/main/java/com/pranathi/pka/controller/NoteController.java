@@ -1,14 +1,17 @@
 package com.pranathi.pka.controller;
 
-import com.pranathi.pka.dto.NoteDTO;
-import com.pranathi.pka.entity.Note;
-import com.pranathi.pka.service.NoteService;
 
+
+import com.pranathi.pka.service.NoteService;
+import java.security.Principal;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import com.pranathi.pka.dto.NoteRequestDTO;
+import com.pranathi.pka.dto.NoteResponseDTO;
 @RestController
 @RequestMapping("/api/notes")
 public class NoteController {
@@ -19,51 +22,65 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping
-     public Note createNote(@Valid @RequestBody Note note) {
-        return noteService.saveNote(note);
-    }
-    @GetMapping
-public List<Note> getAllNotes() {
-    return noteService.getAllNotes();
+@PostMapping
+public NoteResponseDTO createNote(
+        @Valid @RequestBody NoteRequestDTO dto,
+        Authentication authentication) {
+
+    return noteService.saveNote(dto, authentication.getName());
+}
+@GetMapping
+public List<NoteResponseDTO> getAllNotes(Authentication authentication) {
+
+    return noteService.getAllNotes(authentication.getName());
 }
 @GetMapping("/{id}")
-public Note getNoteById(@PathVariable Long id) {
-    return noteService.getNoteById(id);
+public NoteResponseDTO getNoteById(@PathVariable Long id,
+                                   Principal principal) {
+
+    return noteService.getNoteById(id, principal.getName());
 }
 
 @DeleteMapping("/{id}")
-public void deleteNote(@PathVariable Long id) {
-    noteService.deleteNote(id);
+public void deleteNote(@PathVariable Long id, Principal principal) {
+    noteService.deleteNote(id, principal.getName());
 }
 @PutMapping("/{id}")
-public Note updateNote(@PathVariable Long id,
-                       @RequestBody Note note) {
-    return noteService.updateNote(id, note);
+public NoteResponseDTO updateNote(
+        @PathVariable Long id,
+        @Valid @RequestBody NoteRequestDTO dto,
+        Principal principal) {
+
+    return noteService.updateNote(id, dto, principal.getName());
 }
 @GetMapping("/search")
-public List<Note> searchNotes(@RequestParam String keyword) {
-    return noteService.searchNotes(keyword);
+public List<NoteResponseDTO> searchNotes(
+        @RequestParam String keyword,
+        Authentication authentication) {
+
+    return noteService.searchNotes(
+            keyword,
+            authentication.getName());
 }
 /*@PostMapping
 public NoteDTO createNote(@Valid @RequestBody NoteDTO noteDTO) {
     return noteService.createNote(noteDTO);
 }*/
 @GetMapping("/paged")
-public Page<Note> getNotes(
+public Page<NoteResponseDTO> getNotes(
         @RequestParam int page,
         @RequestParam int size) {
 
     return noteService.getNotes(page, size);
 }
 @GetMapping("/sorted")
-public List<Note> getNotesSorted(
+public List<NoteResponseDTO> getNotesSorted(
         @RequestParam String field) {
 
     return noteService.getNotesSorted(field);
 }
 @GetMapping("/paged-sorted")
-public Page<Note> getNotes(
+public Page<NoteResponseDTO> getNotes(
         @RequestParam int page,
         @RequestParam int size,
         @RequestParam String sortBy) {
