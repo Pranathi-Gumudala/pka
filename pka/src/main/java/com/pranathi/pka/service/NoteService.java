@@ -94,33 +94,40 @@ public NoteResponseDTO updateNote(Long id,
 public List<NoteResponseDTO> searchNotes(String keyword, String email) {
 
     return noteRepository
-            .findByTitleContainingIgnoreCaseAndUser_Email(keyword, email)
+            .searchNotes(keyword, email)
             .stream()
             .map(this::mapToResponseDTO)
             .toList();
 }
-public List<NoteResponseDTO> getNotesSorted(String field) {
+public List<NoteResponseDTO> getNotesSorted(String field, String email) {
 
-    return noteRepository.findAll(Sort.by(Sort.Direction.ASC, field))
+    return noteRepository.findByUser_Email(
+                    email,
+                    Sort.by(Sort.Direction.ASC, field))
             .stream()
             .map(this::mapToResponseDTO)
             .toList();
 }
 public Page<NoteResponseDTO> getNotes(int page,
                                       int size,
-                                      String sortBy) {
+                                      String sortBy,
+                                      String email) {
 
     Pageable pageable =
             PageRequest.of(page, size, Sort.by(sortBy));
 
-    return noteRepository.findAll(pageable)
+    return noteRepository
+            .findByUser_Email(email, pageable)
             .map(this::mapToResponseDTO);
 }
-public Page<NoteResponseDTO> getNotes(int page, int size) {
+public Page<NoteResponseDTO> getNotes(int page,
+                                      int size,
+                                      String email) {
 
     Pageable pageable = PageRequest.of(page, size);
 
-    return noteRepository.findAll(pageable)
+    return noteRepository
+            .findByUser_Email(email, pageable)
             .map(this::mapToResponseDTO);
 }
 }

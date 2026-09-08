@@ -69,22 +69,32 @@ public NoteDTO createNote(@Valid @RequestBody NoteDTO noteDTO) {
 @GetMapping("/paged")
 public Page<NoteResponseDTO> getNotes(
         @RequestParam int page,
-        @RequestParam int size) {
+        @RequestParam int size,
+        Authentication authentication) {
 
-    return noteService.getNotes(page, size);
+    return noteService.getNotes(
+            page,
+            size,
+            authentication.getName());
 }
 @GetMapping("/sorted")
 public List<NoteResponseDTO> getNotesSorted(
-        @RequestParam String field) {
+        @RequestParam String field,
+        Authentication authentication) {
 
-    return noteService.getNotesSorted(field);
+    return noteService.getNotesSorted(field, authentication.getName());
 }
 @GetMapping("/paged-sorted")
 public Page<NoteResponseDTO> getNotes(
         @RequestParam int page,
         @RequestParam int size,
-        @RequestParam String sortBy) {
+        @RequestParam String sortBy,
+        Authentication authentication) {
 
-    return noteService.getNotes(page, size, sortBy);
+    return noteService.getNotes(
+            page,
+            size,
+            sortBy,
+            authentication.getName());
 }
 }
