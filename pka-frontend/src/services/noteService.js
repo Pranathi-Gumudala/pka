@@ -23,3 +23,11 @@ export const searchNotes = async (keyword) => {
   const response = await api.get(`/notes/search?keyword=${keyword}`);
   return response.data;
 };
+export const getNotesPaginated = async (page, size) => {
+  const response = await api.get(`/notes/paged?page=${page}&size=${size}`);
+  return response.data;
+};
+export const getSortedNotes = async (field) => {
+  const response = await api.get(`/notes/sorted?field=${field}`);
+  return response.data;
+};

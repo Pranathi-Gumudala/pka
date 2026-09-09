@@ -84,6 +84,7 @@ public List<NoteResponseDTO> getNotesSorted(
 
     return noteService.getNotesSorted(field, authentication.getName());
 }
+
 @GetMapping("/paged-sorted")
 public Page<NoteResponseDTO> getNotes(
         @RequestParam int page,
