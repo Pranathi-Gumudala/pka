@@ -49,7 +49,7 @@ In PowerShell terminal 1:
 
 ```powershell
 cd pka
-.`mvnw.cmd` clean spring-boot:run
+.\mvnw.cmd clean spring-boot:run
 ```
 
 If your terminal is not at the repository root, use `cd .\pka` first. On startup the app creates the `note_chunks` table and enables the pgvector extension. The PostgreSQL database user must have permission to create that extension; the provided local Docker image/database owner normally does.
