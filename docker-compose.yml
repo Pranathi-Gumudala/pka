@@ -1,0 +1,16 @@
+services:
+  pka-vectors:
+    image: pgvector/pgvector:pg17
+    container_name: pka-pgvector
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pka_vectors
+      POSTGRES_USER: pka_vector
+      POSTGRES_PASSWORD: ${VECTOR_DB_PASSWORD:?Set VECTOR_DB_PASSWORD in your environment}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pka_vectors_data:/var/lib/postgresql/data
+
+volumes:
+  pka_vectors_data:
