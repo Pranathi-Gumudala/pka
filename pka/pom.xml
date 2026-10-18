@@ -101,7 +101,7 @@
     <scope>runtime</scope>
 </dependency>
 	
-		<!-- RAG: OpenAI embeddings/chat + JDBC for the separate pgvector database -->
+		<!-- RAG: JDBC driver for the separate PostgreSQL/pgvector index; OpenAI is called through RestClient -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
