@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import RagPanel from "../components/RagPanel";
 import {
   getAllNotes,
   createNote,
@@ -122,6 +123,8 @@ const handleSort = async (field) => {
   return (
     <div>
       <h2>Dashboard</h2>
+
+      <RagPanel />
 
       <h3>Create Note</h3>
 
