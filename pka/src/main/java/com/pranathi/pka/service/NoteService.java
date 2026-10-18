@@ -15,6 +15,7 @@ public class NoteService {
 
 private final NoteRepository noteRepository;
 private final UserRepository userRepository;
+private final NoteIndexingService noteIndexingService;
 private NoteResponseDTO mapToResponseDTO(Note note) {
     return new NoteResponseDTO(
             note.getId(),
@@ -30,9 +31,11 @@ private Note mapToEntity(NoteRequestDTO dto) {
     return note;
 }
 public NoteService(NoteRepository noteRepository,
-                   UserRepository userRepository) {
+                   UserRepository userRepository,
+                   NoteIndexingService noteIndexingService) {
     this.noteRepository = noteRepository;
     this.userRepository = userRepository;
+    this.noteIndexingService = noteIndexingService;
 }
 
     public NoteResponseDTO saveNote(NoteRequestDTO dto, String email) {
@@ -46,6 +49,7 @@ public NoteService(NoteRepository noteRepository,
     note.setUser(user);
 
     Note savedNote = noteRepository.save(note);
+    noteIndexingService.indexNote(savedNote, email);
 
     return mapToResponseDTO(savedNote);
 }
@@ -75,6 +79,7 @@ public void deleteNote(Long id, String email) {
     Note note = noteRepository.findByIdAndUser_Email(id, email)
             .orElseThrow(() -> new NoteNotFoundException(id));
 
+    noteIndexingService.deleteNote(id, email);
     noteRepository.delete(note);
 }
 public NoteResponseDTO updateNote(Long id,
@@ -88,6 +93,7 @@ public NoteResponseDTO updateNote(Long id,
     note.setContent(dto.getContent());
 
     Note updated = noteRepository.save(note);
+    noteIndexingService.indexNote(updated, email);
 
     return mapToResponseDTO(updated);
 }
