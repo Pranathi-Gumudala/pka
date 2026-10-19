@@ -37,7 +37,7 @@ public class NoteIndexingService {
                     note_title TEXT NOT NULL,
                     chunk_index INTEGER NOT NULL,
                     chunk_text TEXT NOT NULL,
-                    embedding vector(1536) NOT NULL,
+                    embedding vector(768) NOT NULL,
                     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                     UNIQUE (user_email, note_id, chunk_index)
                 )

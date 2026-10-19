@@ -12,19 +12,15 @@ This adds retrieval-augmented generation (RAG) to the existing PKA application. 
 
 ## 1. Configure environment variables (Windows PowerShell)
 
-Open PowerShell in the repository root and set these for the current terminal. Replace the example values with your real values:
+From the repository root, create your local environment file and replace its placeholder values with your own:
 
 ```powershell
-$env:DB_URL = "jdbc:mysql://localhost:3306/pka_db"
-$env:DB_USERNAME = "root"
-$env:DB_PASSWORD = "YOUR_MYSQL_PASSWORD"
-$env:OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"
-$env:VECTOR_DB_USERNAME = "pka_vector"
-$env:VECTOR_DB_PASSWORD = "choose_a_local_password"
-$env:VECTOR_DB_URL = "jdbc:postgresql://localhost:5433/pka_vectors"
+Copy-Item .env.example .env
 ```
 
-Do not paste real API keys into source files or commit them. These environment variables last only for the current PowerShell session.
+Spring Boot loads the repository-root `.env` when run from `pka/` and also supports a `.env` in `pka/`; Docker Compose loads the repository-root `.env`. The `.env.example` template itself is not loaded.
+
+Do not paste real API keys into source files or commit them. The local `.env` file is ignored by Git.
 
 ## 2. Start PostgreSQL + pgvector
 
@@ -93,6 +89,7 @@ All endpoints require the existing JWT authentication:
 - **PostgreSQL connection refused:** run `docker compose ps`; verify port 5433 and `VECTOR_DB_URL`.
 - **OpenAI 401:** check `OPENAI_API_KEY`; do not commit it.
 - **OpenAI quota/billing errors:** check your OpenAI API project usage and billing.
+- **JVM native-memory allocation failure:** close memory-intensive applications and retry. The Maven wrapper limits the JVM heap in `pka/.mvn/jvm.config`; increase available system memory if the failure continues.
 - **No notes found:** click **Reindex my notes** while signed in, then retry.
 - **Java version error:** install Java 25 and confirm `java -version`.
 - **CORS/network error:** use the Vite URL and keep the backend on port 8080, matching the existing frontend API client.
