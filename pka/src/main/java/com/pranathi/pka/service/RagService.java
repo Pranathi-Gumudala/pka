@@ -14,19 +14,21 @@ import com.pranathi.pka.repository.NoteRepository;
 
 @Service
 public class RagService {
-
     private final NoteIndexingService indexingService;
     private final OpenAiClient openAi;
     private final NoteRepository noteRepository;
 
-    public RagService(NoteIndexingService indexingService, OpenAiClient openAi,
-                      NoteRepository noteRepository) {
+    public RagService(NoteIndexingService indexingService, OpenAiClient openAi, NoteRepository noteRepository) {
         this.indexingService = indexingService;
         this.openAi = openAi;
         this.noteRepository = noteRepository;
     }
 
     public RagResponse ask(String question, String email) {
+        return ask(question, email, List.of());
+    }
+
+    public RagResponse ask(String question, String email, List<Map<String, String>> history) {
         float[] embedding = openAi.embed(question);
         List<Map<String, Object>> matches = indexingService.search(email, embedding, 5);
         if (matches.isEmpty()) {
@@ -44,7 +46,7 @@ public class RagService {
                     .append(") ---\n").append(chunk).append("\n");
             sources.putIfAbsent(noteId, new RagSource(noteId, title, similarity));
         }
-        String answer = openAi.answer(question, context.toString());
+        String answer = openAi.answer(question, context.toString(), history);
         return new RagResponse(answer, new ArrayList<>(sources.values()));
     }
 
