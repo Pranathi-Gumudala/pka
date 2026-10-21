@@ -58,7 +58,7 @@ public class UploadedDocumentService {
             indexing.index(document.getId(), email, filename, extracted);
             document.setStatus(DocumentStatus.READY);
             document.setErrorMessage(null);
-        } catch (IOException | RuntimeException ex) {
+        } catch (Exception ex) {
             indexing.delete(document.getId(), email);
             document.setStatus(DocumentStatus.FAILED);
             document.setErrorMessage(safeError(ex));
