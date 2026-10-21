@@ -136,9 +136,8 @@ public class OpenAiClient {
                 "generationConfig", Map.of("temperature", 0.2));
 
         String responseText = geminiClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/models/{model}:generateContent")
-                        .queryParam("key", geminiApiKey)
-                        .build(chatModel))
+                .uri(uriBuilder -> uriBuilder.path("/models/{model}:generateContent").build(chatModel))
+                .header("x-goog-api-key", geminiApiKey)
                 .body(request)
                 .retrieve()
                 .body(String.class);
