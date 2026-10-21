@@ -28,7 +28,7 @@ public class OpenAiClient {
             @Value("${app.ollama.embedding-model:nomic-embed-text}") String embeddingModel,
             @Value("${app.ai.chat-provider:gemini}") String chatProvider,
             @Value("${app.ai.gemini.base-url:https://generativelanguage.googleapis.com/v1beta}") String geminiBaseUrl,
-            @Value("${app.ai.gemini.chat-model:gemini-2.5-flash}") String geminiChatModel,
+            @Value("${app.ai.gemini.chat-model:gemini-3.8-flash}") String geminiChatModel,
             @Value("${GEMINI_API_KEY:}") String geminiApiKey) {
         this.ollamaClient = RestClient.builder().baseUrl(ollamaBaseUrl).build();
         this.geminiClient = RestClient.builder().baseUrl(geminiBaseUrl).build();
