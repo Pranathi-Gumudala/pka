@@ -15,3 +15,9 @@
 *.log
 hs_err_pid*
 replay_pid*
+
+# Python agent
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]
