@@ -152,3 +152,33 @@ input, textarea { color: var(--ink); }
   .composer { padding: 14px; }
   .composer-footer { align-items: flex-start; flex-direction: column; }
 }
+
+
+select { font: inherit; }
+.composer-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: .78rem; }
+.task-select { border: 1px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink); padding: 8px 10px; max-width: 100%; }
+.document-panel { margin: 30px 0; }
+.document-upload-form { display: flex; align-items: end; gap: 14px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.document-upload-form .field { flex: 1; min-width: min(100%, 280px); margin-bottom: 0; }
+.document-upload-form input[type="file"] { display: block; width: 100%; padding: 10px; border: 1px dashed var(--line); border-radius: 10px; background: #fffefa; }
+.document-list { display: grid; gap: 10px; margin-top: 16px; }
+.document-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
+.document-icon { display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 10px; background: var(--mint); color: var(--green); font-size: 1.2rem; }
+.document-details { display: flex; flex: 1 1 220px; flex-direction: column; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.document-details strong { font-size: .9rem; }
+.document-details span, .document-details small { color: var(--muted); font-size: .75rem; }
+.document-details small { color: #a34c38; }
+.document-status { border-radius: 999px; padding: 5px 8px; font: 500 .65rem var(--mono); letter-spacing: .04em; }
+.status-ready { background: #e6efe8; color: #285b49; }
+.status-processing { background: #fff1d9; color: #805c21; }
+.status-failed { background: #f9e7e1; color: #963e2b; }
+.document-actions { display: flex; gap: 6px; }
+.document-empty { margin-top: 16px; }
+@media (max-width: 640px) {
+  .composer-footer { align-items: stretch; flex-direction: column; }
+  .composer-tools { align-items: flex-start; }
+  .task-select { width: 100%; }
+  .document-upload-form { align-items: stretch; flex-direction: column; }
+  .document-actions { width: 100%; }
+  .document-actions .button { flex: 1; }
+}

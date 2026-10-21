@@ -81,15 +81,31 @@ public class NoteIndexingService {
     }
 
     public List<Map<String, Object>> search(String email, float[] queryEmbedding, int limit) {
+        String vector = toVectorLiteral(queryEmbedding);
         return jdbc.queryForList("""
-                SELECT note_id, note_title, chunk_text,
-                       1 - (embedding <=> CAST(? AS vector)) AS similarity
-                FROM note_chunks
-                WHERE user_email = ?
-                ORDER BY embedding <=> CAST(? AS vector)
+                SELECT note_id, note_title, chunk_text, similarity, source_type, document_id, filename, chunk_index
+                FROM (
+                    SELECT note_id, note_title, chunk_text,
+                           1 - (embedding <=> CAST(? AS vector)) AS similarity,
+                           'note'::text AS source_type,
+                           NULL::bigint AS document_id,
+                           NULL::text AS filename,
+                           chunk_index
+                    FROM note_chunks
+                    WHERE user_email = ?
+                    UNION ALL
+                    SELECT NULL::bigint AS note_id, filename AS note_title, chunk_text,
+                           1 - (embedding <=> CAST(? AS vector)) AS similarity,
+                           'document'::text AS source_type,
+                           document_id,
+                           filename,
+                           chunk_index
+                    FROM document_chunks
+                    WHERE user_email = ?
+                ) AS matches
+                ORDER BY similarity DESC
                 LIMIT ?
-                """,
-                toVectorLiteral(queryEmbedding), email, toVectorLiteral(queryEmbedding), limit);
+                """, vector, email, vector, email, limit);
     }
 
     private List<String> splitIntoChunks(String text) {

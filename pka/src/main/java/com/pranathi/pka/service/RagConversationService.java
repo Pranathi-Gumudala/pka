@@ -23,13 +23,16 @@ public class RagConversationService {
     private final RagConversationRepository conversations;
     private final RagMessageRepository messages;
     private final RagService ragService;
+    private final AgentOrchestrationService agentService;
     private final ObjectMapper mapper;
 
     public RagConversationService(RagConversationRepository conversations, RagMessageRepository messages,
-                                  RagService ragService, ObjectMapper mapper) {
+                                  RagService ragService, AgentOrchestrationService agentService,
+                                  ObjectMapper mapper) {
         this.conversations = conversations;
         this.messages = messages;
         this.ragService = ragService;
+        this.agentService = agentService;
         this.mapper = mapper;
     }
 
@@ -78,7 +81,15 @@ public class RagConversationService {
         RagMessage userMessage = messages.save(new RagMessage(conversation,
                 request.parentMessageId(), "user", request.question().trim(), "[]"));
 
-        RagResponse response = ragService.ask(request.question().trim(), email, history);
+        String task = request.task() == null ? "ask" : request.task();
+        RagResponse response;
+        if ("ask".equals(task)) {
+            response = ragService.ask(request.question().trim(), email, history);
+        } else {
+            AgentResponse agentResponse = agentService.run(
+                    new AgentRequest(task, request.question().trim()), email);
+            response = new RagResponse(agentResponse.answer(), agentResponse.sources());
+        }
         String sourcesJson;
         try {
             sourcesJson = mapper.writeValueAsString(response.sources());

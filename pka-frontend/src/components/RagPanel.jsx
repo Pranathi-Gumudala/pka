@@ -13,6 +13,8 @@ export default function RagPanel() {
   const [messages, setMessages] = useState([]);
   const [leafMessageId, setLeafMessageId] = useState(null);
   const [question, setQuestion] = useState("");
+  const [task, setTask] = useState("ask");
+  const [task, setTask] = useState("ask");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -92,14 +94,14 @@ export default function RagPanel() {
     const asked = question.trim();
     setQuestion("");
     try {
-      const added = await askInConversation(conversationId, asked, leafMessageId);
+      const added = await askInConversation(conversationId, asked, leafMessageId, task);
       setMessages((current) => [...current, ...added]);
       const nextLeaf = [...added].reverse().find((message) => message.role === "assistant")?.id ?? leafMessageId;
       setLeafMessageId(nextLeaf);
       await refreshConversations();
     } catch (err) {
       setQuestion(asked);
-      setError(err.response?.data?.message || "Could not answer the question. Check that the backend, Ollama, and vector database are running.");
+      setError(err.response?.data?.message || "Could not answer the question. Check that the backend, agent service, embedding model, and vector database are running.");
     } finally {
       setBusy(false);
     }
@@ -124,7 +126,7 @@ export default function RagPanel() {
       const result = await reindexRag();
       setStatus(`Reindexed ${result.indexedNotes} notes. You can ask a question now.`);
     } catch (err) {
-      setError(err.response?.data?.message || "Reindex failed. Check that the backend, Ollama, and vector database are running.");
+      setError(err.response?.data?.message || "Reindex failed. Check that the backend, agent service, embedding model, and vector database are running.");
     } finally {
       setBusy(false);
     }
@@ -168,7 +170,7 @@ export default function RagPanel() {
               <span className="eyebrow">CURRENT THREAD</span>
               <h3>{activeConversation?.title || "A fresh line of thought"}</h3>
             </div>
-            <span className="model-pill">⌁ Note-grounded RAG</span>
+            <span className="model-pill">⌁ Gemini + grounded retrieval</span>
           </div>
 
           <div className="message-list" aria-live="polite">
@@ -191,9 +193,11 @@ export default function RagPanel() {
                   <p className="message-content">{message.content}</p>
                   {message.sources?.length > 0 && (
                     <div className="source-list">
-                      <span className="source-heading">SOURCES FROM YOUR NOTES</span>
+                      <span className="source-heading">SOURCES FROM YOUR LIBRARY</span>
                       {message.sources.map((source) => (
-                        <span className="source-chip" key={source.noteId}>↗ {source.title}</span>
+                        <span className="source-chip" key={source.sourceType === "document" ? `document-${source.documentId}` : `note-${source.noteId}`}>
+                          ↗ {source.sourceType === "document" ? "Document" : "Note"}: {source.title}
+                        </span>
                       ))}
                     </div>
                   )}
@@ -221,7 +225,16 @@ export default function RagPanel() {
               disabled={busy || !conversationId}
             />
             <div className="composer-footer">
-              <span>Answers are grounded in your indexed notes.</span>
+              <div className="composer-tools">
+                <label htmlFor="study-task">Mode</label>
+                <select id="study-task" className="task-select" value={task} onChange={(event) => setTask(event.target.value)} disabled={busy}>
+                  <option value="ask">Ask my library</option>
+                  <option value="research">Source-grounded research</option>
+                  <option value="summarize">Study summary</option>
+                  <option value="quiz">Generate a quiz</option>
+                </select>
+                <span>Grounded in your indexed notes and documents.</span>
+              </div>
               <button className="button button-primary" type="submit" disabled={busy || !question.trim() || !conversationId}>
                 {busy ? "Thinking…" : "Send question ↗"}
               </button>

@@ -17,8 +17,9 @@ export const getConversationMessages = async (conversationId, leafMessageId) => 
   const params = leafMessageId ? { leafMessageId } : {};
   return (await api.get(`/rag/conversations/${conversationId}/messages`, { params })).data;
 };
-export const askInConversation = async (conversationId, question, parentMessageId) =>
+export const askInConversation = async (conversationId, question, parentMessageId, task = "ask") =>
   (await api.post(`/rag/conversations/${conversationId}/messages`, {
     question,
     parentMessageId: parentMessageId ?? null,
+    task,
   })).data;
