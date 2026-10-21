@@ -83,7 +83,7 @@ async def generate_with_gemini(system_prompt: str, user_prompt: str) -> str:
         "generationConfig": {"temperature": 0.2},
     }
     async with httpx.AsyncClient(timeout=90.0) as client:
-        response = await client.post(url, params={"key": GEMINI_API_KEY}, json=payload)
+        response = await client.post(url, headers={"x-goog-api-key": GEMINI_API_KEY}, json=payload)
         response.raise_for_status()
         data = response.json()
     parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
