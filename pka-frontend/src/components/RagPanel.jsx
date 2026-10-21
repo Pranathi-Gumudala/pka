@@ -14,6 +14,7 @@ export default function RagPanel() {
   const [leafMessageId, setLeafMessageId] = useState(null);
   const [question, setQuestion] = useState("");
   const [task, setTask] = useState("ask");
+  const [task, setTask] = useState("ask");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -125,7 +126,7 @@ export default function RagPanel() {
       const result = await reindexRag();
       setStatus(`Reindexed ${result.indexedNotes} notes. You can ask a question now.`);
     } catch (err) {
-      setError(err.response?.data?.message || "Reindex failed. Check that the backend, Ollama, and vector database are running.");
+      setError(err.response?.data?.message || "Reindex failed. Check that the backend, agent service, embedding model, and vector database are running.");
     } finally {
       setBusy(false);
     }
