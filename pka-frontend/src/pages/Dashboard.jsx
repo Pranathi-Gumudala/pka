@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RagPanel from "../components/RagPanel";
+import DocumentPanel from "../components/DocumentPanel";
 import {
   createNote,
   updateNote,
@@ -113,6 +114,8 @@ function Dashboard() {
       <section className="page-intro">
         <div><span className="eyebrow">A SPACE TO THINK CLEARLY</span><h1>Make room for<br />your next idea.</h1><p>Keep your notes close, connect the dots, and ask your own knowledge base questions when a thought needs a little more room.</p></div>
       </section>
+
+      <DocumentPanel />
 
       <RagPanel />
 
