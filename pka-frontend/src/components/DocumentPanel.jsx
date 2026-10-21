@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { deleteDocument, listDocuments, reindexDocument, uploadDocument } from "../services/documentService";
 
 export default function DocumentPanel() {
@@ -7,6 +7,7 @@ export default function DocumentPanel() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
+  const fileInputRef = useRef(null);
 
   const refresh = useCallback(async () => {
     const data = await listDocuments();
@@ -29,7 +30,7 @@ export default function DocumentPanel() {
         ? `Indexed ${result.filename} successfully.`
         : `${result.filename} upload status: ${result.status}. ${result.errorMessage || ""}`);
       setFile(null);
-      event.currentTarget.reset();
+      if (fileInputRef.current) fileInputRef.current.value = "";
       await refresh();
     } catch (err) {
       setError(err.response?.data?.detail || err.response?.data?.message || "Upload failed. Check the backend, Ollama embeddings, and pgvector.");
@@ -84,6 +85,7 @@ export default function DocumentPanel() {
         <div className="field">
           <label htmlFor="document-file">Choose a document (max 15 MB)</label>
           <input
+            ref={fileInputRef}
             id="document-file"
             type="file"
             accept=".pdf,.txt,.docx,.pptx"
