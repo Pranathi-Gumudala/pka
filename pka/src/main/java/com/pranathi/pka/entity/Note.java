@@ -18,7 +18,11 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Content cannot be empty")
     private String content;
+    private String originalFileName;
 
+private String fileType;
+
+private String uploadedFilePath;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore

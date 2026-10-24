@@ -1,0 +1,24 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Java / Maven
+**/target/
+*.class
+
+# Node / Vite
+node_modules/
+**/node_modules/
+**/dist/
+
+# Local logs and JVM crash reports
+*.log
+hs_err_pid*
+replay_pid*
+
+# Python agent
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]

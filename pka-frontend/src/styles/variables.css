@@ -1,0 +1,28 @@
+:root {
+
+  /* Colors */
+  --bg: #0B1020;
+  --surface: rgba(255,255,255,0.08);
+  --surface-hover: rgba(255,255,255,0.12);
+
+  --primary: #8B5CF6;
+  --secondary: #3B82F6;
+  --accent: #06B6D4;
+
+  --success: #22C55E;
+  --danger: #EF4444;
+
+  --text: #F8FAFC;
+  --muted: #94A3B8;
+
+  /* Radius */
+  --radius:24px;
+
+  /* Shadows */
+  --shadow:
+      0 10px 35px rgba(0,0,0,.35);
+
+  --glow:
+      0 0 30px rgba(139,92,246,.35);
+
+}

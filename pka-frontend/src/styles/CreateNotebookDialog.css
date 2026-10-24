@@ -1,0 +1,48 @@
+.dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.dialog-box {
+    width: 400px;
+    padding: 30px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+
+    text-align: center;
+}
+
+.dialog-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.dialog-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.dialog-buttons button {
+    flex: 1;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    margin-top: 20px;
+}
